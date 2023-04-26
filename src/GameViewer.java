@@ -37,10 +37,21 @@ public class GameViewer extends JFrame implements KeyListener
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
+        if (keyCode == KeyEvent.VK_W)
+        {
+            game.getBoard().moveUp();
+        }
         if (keyCode == KeyEvent.VK_A)
         {
-            System.out.printf("A was pressed!");
             game.getBoard().moveLeft();
+        }
+        if (keyCode == KeyEvent.VK_S)
+        {
+            game.getBoard().moveDown();
+        }
+        if (keyCode == KeyEvent.VK_D)
+        {
+            game.getBoard().moveRight();
         }
 
         repaint();

@@ -23,9 +23,9 @@ public class Tile {
 
     public void combine(Tile other)
     {
-        if (this.val == other.val)
+        if (this.val != 0 && this.val == other.val)
         {
-            this.val = 2;
+            this.val *= 2;
             other.val = 0;
         }
     }
