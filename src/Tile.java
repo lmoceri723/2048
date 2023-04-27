@@ -44,6 +44,9 @@ public class Tile {
     {
         g.setFont(new Font(Font.SERIF, Font.PLAIN,  100));
         g.setColor(new Color(118, 110, 102));
-        g.drawString(Integer.toString(val), row * 200 + 50, col * 200 + 100);
+        if (val != 0)
+        {
+            g.drawString(Integer.toString(val), row * 200 + 50, col * 200 + 100);
+        }
     }
 }
