@@ -54,23 +54,23 @@ public class Board {
 
     public void moveLeft()
     {
-        for (int i = 0; i < BOARD_SIZE; i++)
+        for (int row = 0; row < BOARD_SIZE; row++)
         {
-            for (int j = 1; j < BOARD_SIZE;)
+            for (int col = 1; col < BOARD_SIZE;)
             {
-                if (j > 0)
+                if (col > 0)
                 {
-                    board[i][j].combine(board[i][j-1]);
+                    board[row][col].combine(board[row][col-1]);
                 }
-                if (j > 0 && board[i][j].getVal() != 0 && board[i][j-1].getVal() == 0)
+                if (col > 0 && board[row][col].getVal() != 0 && board[row][col-1].getVal() == 0)
                 {
-                    board[i][j-1].setVal(board[i][j].getVal());
-                    board[i][j].setVal(0);
-                    j--;
+                    board[row][col-1].setVal(board[row][col].getVal());
+                    board[row][col].setVal(0);
+                    col--;
                 }
                 else
                 {
-                    j++;
+                    col++;
                 }
             }
         }
@@ -78,71 +78,71 @@ public class Board {
 
     public void moveRight()
     {
-        for (int i = 0; i < BOARD_SIZE; i++)
+        for (int row = 0; row < BOARD_SIZE; row++)
         {
-            for (int j = BOARD_SIZE; j >= 0;)
+            for (int col = BOARD_SIZE; col >= 0;)
             {
-                if (j < BOARD_SIZE - 1)
+                if (col < BOARD_SIZE - 1)
                 {
-                    board[i][j].combine(board[i][j+1]);
+                    board[row][col].combine(board[row][col+1]);
                 }
 
-                if (j < BOARD_SIZE - 1 && board[i][j].getVal() != 0 && board[i][j+1].getVal() == 0)
+                if (col < BOARD_SIZE - 1 && board[row][col].getVal() != 0 && board[row][col+1].getVal() == 0)
                 {
-                    board[i][j+1].setVal(board[i][j].getVal());
-                    board[i][j].setVal(0);
-                    j++;
+                    board[row][col+1].setVal(board[row][col].getVal());
+                    board[row][col].setVal(0);
+                    col++;
                 }
                 else
                 {
-                    j--;
+                    col--;
                 }
             }
         }
     }
     public void moveUp()
     {
-        for (int i = 0; i < BOARD_SIZE; i++)
+        for (int col = 0; col < BOARD_SIZE; col++)
         {
-            for (int j = 1; j < BOARD_SIZE;)
+            for (int row = 1; row < BOARD_SIZE;)
             {
-                if (j > 0)
+                if (row > 0)
                 {
-                    board[j][i].combine(board[j-1][i]);
+                    board[row][col].combine(board[row-1][col]);
                 }
-                if (j > 0 && board[j][i].getVal() != 0 && board[j-1][i].getVal() == 0)
+                if (row > 0 && board[row][col].getVal() != 0 && board[row-1][col].getVal() == 0)
                 {
-                    board[j-1][i].setVal(board[j][i].getVal());
-                    board[j][i].setVal(0);
-                    j--;
+                    board[row-1][col].setVal(board[row][col].getVal());
+                    board[row][col].setVal(0);
+                    row--;
                 }
                 else
                 {
-                    j++;
+                    row++;
                 }
             }
         }
     }
     public void moveDown()
     {
-        for (int i = 0; i < BOARD_SIZE; i++)
+        for (int col = 0; col < BOARD_SIZE; col++)
         {
-            for (int j = BOARD_SIZE - 1; j >= 0;)
+            for (int row = BOARD_SIZE - 1; row >= 0;)
             {
-                if (j < BOARD_SIZE - 1)
+                if (row < BOARD_SIZE - 1)
                 {
-                    board[j + 1][i].combine(board[j][i]);
+                    board[row + 1][col].combine(board[row][col]);
                 }
 
-                if (j < BOARD_SIZE - 1 && board[j][i].getVal() != 0 && board[j+1][i].getVal() == 0)
+                if (row < BOARD_SIZE - 1 && board[row][col].getVal() != 0 && board[row+1][col].getVal() == 0)
                 {
-                    board[j+1][i].setVal(board[j][i].getVal());
-                    board[j][i].setVal(0);
-                    j++;
+                    board[row+1][col].setVal(board[row][col].getVal());
+                    board[row][col].setVal(0);
+                    row++;
                 }
                 else
                 {
-                    j--;
+                    row--;
                 }
             }
         }
@@ -159,9 +159,7 @@ public class Board {
             {
                 board[i][j].draw(g, j, i);
             }
-
         }
-
     }
 
     public void save ()
