@@ -5,7 +5,7 @@ public class Tile {
 
     public Tile()
     {
-        int chance = (int) (Math.random() * 4);
+        int chance = (int) (Math.random() * 10);
         if (chance == 0)
         {
             val = 4;

@@ -58,6 +58,7 @@ public class GameViewer extends JFrame implements KeyListener
             game.getBoard().reset();
         }
 
+        game.getBoard().generate();
         repaint();
     }
 
