@@ -53,6 +53,10 @@ public class GameViewer extends JFrame implements KeyListener
         {
             game.getBoard().moveRight();
         }
+        if (keyCode == KeyEvent.VK_R)
+        {
+            game.getBoard().reset();
+        }
 
         repaint();
     }

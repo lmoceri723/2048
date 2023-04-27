@@ -23,11 +23,8 @@ public class Board {
                 board[i][j] = new Tile(0);
             }
         }
-        board[0][3].setVal(2);
-        board[0][2].setVal(2);
-        board[1][2].setVal(2);
-        board[2][1].setVal(2);
-        board[3][0].setVal(2);
+        board[1][1].setVal(2);
+        board[1][2].setVal(4);
     }
 
     public void combineHorizontal()
@@ -57,13 +54,12 @@ public class Board {
         combineHorizontal();
         for (int i = 0; i < BOARD_SIZE; i++)
         {
-            for (int j = 1; j < BOARD_SIZE; j++)
+            for (int j = BOARD_SIZE - 1; j > 0; j--)
             {
                 while (board[i][j].getVal() != 0 && board[i][j-1].getVal() == 0)
                 {
                     board[i][j-1].setVal(board[i][j].getVal());
                     board[i][j].setVal(0);
-                    //j--;
                 }
             }
         }
@@ -80,7 +76,6 @@ public class Board {
                 {
                     board[i][j+1].setVal(board[i][j].getVal());
                     board[i][j].setVal(0);
-                    //j--;
                 }
             }
         }
@@ -88,7 +83,7 @@ public class Board {
     public void moveUp()
     {
         combineVertical();
-        for (int i = 1; i < BOARD_SIZE; i++)
+        for (int i = BOARD_SIZE - 1; i > 0; i--)
         {
             for (int j = 0; j < BOARD_SIZE; j++)
             {
@@ -96,7 +91,6 @@ public class Board {
                 {
                     board[i-1][j].setVal(board[i][j].getVal());
                     board[i][j].setVal(0);
-                    //j--;
                 }
             }
         }
@@ -121,7 +115,7 @@ public class Board {
 
     public void draw (Graphics g)
     {
-        g.setColor(Color.ORANGE);
+        g.setColor(new Color(203, 193, 181));
         g.fillRect(0,0, GameViewer.SCREEN_SIZE, GameViewer.SCREEN_SIZE);
 
         for (int i = 0; i < BOARD_SIZE; i++)
