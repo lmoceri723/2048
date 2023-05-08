@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class Game {
     private Board board;
     private int score;
@@ -17,11 +21,6 @@ public class Game {
     public void playGame()
     {
         window.repaint();
-    }
-
-    public boolean checkLoss()
-    {
-        return true;
     }
 
     public static void main(String[] args) {

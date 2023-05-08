@@ -1,7 +1,11 @@
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Tile {
     private int val;
+    private boolean newlyCombined;
+
 
     public Tile()
     {
@@ -14,18 +18,21 @@ public class Tile {
         {
             val = 2;
         }
+        newlyCombined = false;
     }
     public Tile(int val)
     {
         this.val = val;
+        newlyCombined = false;
     }
 
 
     public void combine(Tile other)
     {
-        if (this.val != 0 && this.val == other.val)
+        if (this.val != 0 && this.val == other.val && !this.newlyCombined && !other.newlyCombined)
         {
             this.val *= 2;
+            this.newlyCombined = true;
             other.val = 0;
         }
     }
@@ -40,9 +47,14 @@ public class Tile {
         this.val = val;
     }
 
+    public void setNewlyCombined(boolean newlyCombined)
+    {
+        this.newlyCombined = newlyCombined;
+    }
+
     public void draw(Graphics g, int row, int col)
     {
-        g.setFont(new Font(Font.SERIF, Font.PLAIN,  100));
+        g.setFont(GameViewer.FONT);
         g.setColor(new Color(118, 110, 102));
         if (val != 0)
         {

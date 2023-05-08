@@ -1,16 +1,20 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Board {
     private Tile[][] board;
     public static final int BOARD_SIZE = 4;
+    public static final int BOARD_DIMENSIONS = 600;
 
     public Board()
     {
         board = new Tile[4][4];
         reset();
+        generate();
     }
 
     public void generate()
@@ -40,6 +44,50 @@ public class Board {
         }
         return spaces;
     }
+
+    public boolean gameNotOver()
+    {
+        // Check if board is the same after being changed moved in each direction
+        Board testingBoard = new Board();
+        boolean notMoveable;
+
+        for (int row = 0; row < BOARD_SIZE; row++)
+        {
+            for (int col = 0; col < BOARD_SIZE; col++)
+            {
+                testingBoard.board[row][col].setVal(this.board[row][col].getVal());
+            }
+        }
+        testingBoard.moveLeft();
+        notMoveable = this.equals(testingBoard);
+
+        testingBoard.moveRight();
+        notMoveable = notMoveable && this.equals(testingBoard);
+
+        testingBoard.moveUp();
+        notMoveable = notMoveable && this.equals(testingBoard);
+
+        testingBoard.moveDown();
+        notMoveable = notMoveable && this.equals(testingBoard);
+
+        return !notMoveable;
+    }
+
+    public boolean equals(Board other)
+    {
+        for (int row = 0; row < BOARD_SIZE; row++)
+        {
+            for (int col = 0; col < BOARD_SIZE; col++)
+            {
+                if (this.board[row][col].getVal() != other.board[row][col].getVal())
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public void reset()
     {
         for (int i = 0; i < BOARD_SIZE; i++)
@@ -48,8 +96,6 @@ public class Board {
                 board[i][j] = new Tile(0);
             }
         }
-
-        generate();
     }
 
     public void moveLeft()
@@ -60,7 +106,7 @@ public class Board {
             {
                 if (col > 0)
                 {
-                    board[row][col].combine(board[row][col-1]);
+                    board[row][col-1].combine(board[row][col]);
                 }
                 if (col > 0 && board[row][col].getVal() != 0 && board[row][col-1].getVal() == 0)
                 {
@@ -73,7 +119,14 @@ public class Board {
                     col++;
                 }
             }
+
+            for (int col = 0; col < BOARD_SIZE; col++)
+            {
+                board[row][col].setNewlyCombined(false);
+            }
         }
+
+       generate();
     }
 
     public void moveRight()
@@ -84,7 +137,7 @@ public class Board {
             {
                 if (col < BOARD_SIZE - 1)
                 {
-                    board[row][col].combine(board[row][col+1]);
+                    board[row][col + 1].combine(board[row][col]);
                 }
 
                 if (col < BOARD_SIZE - 1 && board[row][col].getVal() != 0 && board[row][col+1].getVal() == 0)
@@ -98,7 +151,14 @@ public class Board {
                     col--;
                 }
             }
+
+            for (int col = 0; col < BOARD_SIZE; col++)
+            {
+                board[row][col].setNewlyCombined(false);
+            }
         }
+
+        generate();
     }
     public void moveUp()
     {
@@ -108,7 +168,7 @@ public class Board {
             {
                 if (row > 0)
                 {
-                    board[row][col].combine(board[row-1][col]);
+                    board[row-1][col].combine(board[row][col]);
                 }
                 if (row > 0 && board[row][col].getVal() != 0 && board[row-1][col].getVal() == 0)
                 {
@@ -121,7 +181,14 @@ public class Board {
                     row++;
                 }
             }
+
+            for (int row = 0; row < BOARD_SIZE; row++)
+            {
+                board[row][col].setNewlyCombined(false);
+            }
         }
+
+        generate();
     }
     public void moveDown()
     {
@@ -131,7 +198,7 @@ public class Board {
             {
                 if (row < BOARD_SIZE - 1)
                 {
-                    board[row + 1][col].combine(board[row][col]);
+                    board[row+1][col].combine(board[row][col]);
                 }
 
                 if (row < BOARD_SIZE - 1 && board[row][col].getVal() != 0 && board[row+1][col].getVal() == 0)
@@ -145,14 +212,18 @@ public class Board {
                     row--;
                 }
             }
+
+            for (int row = 0; row < BOARD_SIZE; row++)
+            {
+                board[row][col].setNewlyCombined(false);
+            }
         }
+
+        generate();
     }
 
     public void draw (Graphics g)
     {
-        g.setColor(new Color(203, 193, 181));
-        g.fillRect(0,0, GameViewer.SCREEN_SIZE, GameViewer.SCREEN_SIZE);
-
         for (int i = 0; i < BOARD_SIZE; i++)
         {
             for (int j = 0; j < BOARD_SIZE; j++)
@@ -162,13 +233,39 @@ public class Board {
         }
     }
 
-    public void save ()
+    public void save() throws IOException
     {
+        File wordFile = new File("rsc/save.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(wordFile, false));
 
+        for (int row = 0; row < BOARD_SIZE; row++)
+        {
+            for (int col = 0; col < BOARD_SIZE; col++)
+            {
+                String output = board[row][col].getVal() + "";
+                writer.append(output);
+                writer.newLine();
+            }
+        }
+        writer.close();
     }
 
     public void load()
     {
+        Scanner s;
+        File saveFile = new File("rsc/save.txt");
+        try {
+            s = new Scanner(saveFile);
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not open dictionary file.");
+            return;
+        }
 
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++)
+            {
+                board[row][col].setVal(Integer.parseInt(s.nextLine()));
+            }
+        }
     }
 }
