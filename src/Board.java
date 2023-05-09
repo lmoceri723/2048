@@ -224,6 +224,12 @@ public class Board {
 
     public void draw (Graphics g)
     {
+        g.setColor(GameViewer.BORDER_COLOR);
+        g.fillRoundRect(GameViewer.SCREEN_HEIGHT / 20 + GameViewer.SCREEN_WIDTH / 3,
+                GameViewer.SCREEN_HEIGHT / 20 + 30,
+                GameViewer.SCREEN_HEIGHT / 20 * 18,
+                GameViewer.SCREEN_HEIGHT / 20 * 18, 25, 25);
+
         for (int i = 0; i < BOARD_SIZE; i++)
         {
             for (int j = 0; j < BOARD_SIZE; j++)

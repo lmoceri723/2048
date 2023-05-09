@@ -52,13 +52,47 @@ public class Tile {
         this.newlyCombined = newlyCombined;
     }
 
+    public int[] getCoordinates(int row, int col)
+    {
+        int x = GameViewer.SCREEN_WIDTH / 3 + GameViewer.SCREEN_HEIGHT / 20 + GameViewer.SCREEN_HEIGHT / 50 +
+                row * (GameViewer.SCREEN_HEIGHT / 5 + GameViewer.SCREEN_HEIGHT / 50);
+        int y = GameViewer.BORDER_HEIGHT + GameViewer.SCREEN_HEIGHT / 20+ GameViewer.SCREEN_HEIGHT / 50 +
+                col * (GameViewer.SCREEN_HEIGHT / 5 + GameViewer.SCREEN_HEIGHT / 50);
+
+        return new int[]{x, y};
+    }
+
     public void draw(Graphics g, int row, int col)
     {
-        g.setFont(GameViewer.FONT);
-        g.setColor(new Color(118, 110, 102));
-        if (val != 0)
+        int index;
+        if (val == 0)
         {
-            g.drawString(Integer.toString(val), row * 200 + 50, col * 200 + 100);
+            index = 0;
         }
+        else
+        {
+            index = (int) (Math.log(val) / Math.log(2));
+        }
+
+        int[] coordinates = getCoordinates(row, col);
+        int x = coordinates[0];
+        int y = coordinates[1];
+
+        g.setColor(GameViewer.SQUARE_COLORS[index]);
+        g.fillRect(x, y, GameViewer.SCREEN_HEIGHT / 5, GameViewer.SCREEN_HEIGHT / 5);
+
+        switch (val) {
+            case 0 -> {
+                return;
+            }
+            case 2, 4 -> g.setColor(GameViewer.DARK_TEXT);
+            default -> g.setColor(GameViewer.LIGHT_TEXT);
+        }
+
+        // derive the font size
+        Font newFont = GameViewer.FONT.deriveFont(Font.PLAIN, 75);
+        g.setFont(newFont);
+
+        g.drawString(Integer.toString(val), x + 50, y + 100);
     }
 }
