@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Tile {
     private int val;
@@ -90,9 +91,15 @@ public class Tile {
         }
 
         // derive the font size
-        Font newFont = GameViewer.FONT.deriveFont(Font.PLAIN, 75);
+        String displayMessage = " " + val + " ";
+        int size = (int) ((GameViewer.SCREEN_HEIGHT / 5) / displayMessage.length() * 1.65);
+
+        Font newFont = GameViewer.FONT.deriveFont(Font.BOLD, size);
         g.setFont(newFont);
 
-        g.drawString(Integer.toString(val), x + 50, y + 100);
+        System.out.println(size);
+        System.out.println(g.getFontMetrics().getHeight());
+
+        g.drawString(displayMessage, x, y + GameViewer.SCREEN_HEIGHT / 10 + g.getFontMetrics().getHeight() / 4);
     }
 }
