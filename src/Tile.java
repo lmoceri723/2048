@@ -90,16 +90,12 @@ public class Tile {
             default -> g.setColor(GameViewer.LIGHT_TEXT);
         }
 
-        // derive the font size
         String displayMessage = " " + val + " ";
         int size = (int) ((GameViewer.SCREEN_HEIGHT / 5) / displayMessage.length() * 1.65);
 
         Font newFont = GameViewer.FONT.deriveFont(Font.BOLD, size);
         g.setFont(newFont);
 
-        System.out.println(size);
-        System.out.println(g.getFontMetrics().getHeight());
-
-        g.drawString(displayMessage, x, y + GameViewer.SCREEN_HEIGHT / 10 + g.getFontMetrics().getHeight() / 4);
+        g.drawString(displayMessage, x + (GameViewer.SCREEN_HEIGHT / 5 - g.getFontMetrics().stringWidth(displayMessage)) / 2, y + GameViewer.SCREEN_HEIGHT / 10 + g.getFontMetrics().getHeight() / 4);
     }
 }
