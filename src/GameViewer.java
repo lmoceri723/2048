@@ -2,14 +2,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLOutput;
 
-public class GameViewer extends JFrame implements KeyListener
+public class GameViewer extends JFrame implements KeyListener, MouseListener
 {
-    public static final int SCREEN_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight()
-            - ((int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight()) % 200));
+    public static final int SCREEN_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 30
+            - ((int) (((Toolkit.getDefaultToolkit().getScreenSize().getHeight()) - 30) % 200));
     public static final int SCREEN_WIDTH = SCREEN_HEIGHT * 3 / 2;
 
     public static final int BORDER_HEIGHT = 30;
@@ -44,10 +46,6 @@ public class GameViewer extends JFrame implements KeyListener
             new Color(94, 181, 100),
         };
 
-    public static final int[] FONT_SIZES = {
-            0,
-            0,
-    };
     private Game game;
 
     public GameViewer(Game game) {
@@ -66,6 +64,7 @@ public class GameViewer extends JFrame implements KeyListener
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         addKeyListener(this);
+        addMouseListener(this);
 
         setVisible(true);
     }
@@ -74,13 +73,21 @@ public class GameViewer extends JFrame implements KeyListener
     {
         drawBackground(g);
         game.getBoard().draw(g);
+
+        for (Button b : game.getButton())
+        {
+            b.draw(g);
+        }
+
+//        g.setColor(new Color(0, 0, 0, 140));
+//        g.fillRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT + BORDER_HEIGHT);
         Toolkit.getDefaultToolkit().sync();
     }
 
     public void drawBackground(Graphics g)
     {
         g.setColor(new Color(237, 228, 219));
-        g.fillRect(0,BORDER_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
+        g.fillRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT + BORDER_HEIGHT);
     }
     @Override
     public void keyTyped(KeyEvent e) {
@@ -125,6 +132,35 @@ public class GameViewer extends JFrame implements KeyListener
 
     @Override
     public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e)
+    {
+        for (Button b : game.getButton())
+        {
+            b.mouseInBounds(e.getX(), e.getY());
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
 
     }
 }
