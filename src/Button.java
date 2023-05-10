@@ -26,14 +26,30 @@ public class Button
         g.setColor(GameViewer.BUTTON_COLOR);
         g.fillRoundRect(x1, y1, x2-x1, y2-y1, 50, 50);
 
-        String displayMessage = "  " + label + "  ";
-        int size = (int) ((x2 - x1) / displayMessage.length() * 1.65);
+        String displayMessage = "AA" + label + "AA";
+        int size = (int) ((x2 - x1) / displayMessage.length()) * 4;
+        // Height differential = * 1.5
+        System.out.println(getFontSize("Test", 250, g, 0));
 
-        Font newFont = GameViewer.FONT.deriveFont(Font.BOLD, size);
         g.setColor(GameViewer.LIGHT_TEXT);
-        g.setFont(newFont);
+        g.setFont(GameViewer.FONT.deriveFont(Font.BOLD, size));
 
-        g.drawString(displayMessage, x1, GameViewer.BORDER_HEIGHT + y1 + g.getFontMetrics().getHeight() / 2);
+        g.drawString(displayMessage, x1, y2);
+    }
+
+    public int getFontSize(String text, int bounds, Graphics g, int size)
+    {
+        Font f = GameViewer.FONT.deriveFont(Font.BOLD, size);
+        g.setFont(f);
+        int width = g.getFontMetrics().stringWidth(text);
+        if (width >= bounds)
+        {
+            return size;
+        }
+
+        getFontSize(text, bounds, g, size + 1);
+
+        return 0;
     }
 
     public boolean mouseInBounds(int mouseX, int mouseY)
