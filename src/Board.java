@@ -14,7 +14,6 @@ public class Board {
     {
         board = new Tile[4][4];
         reset();
-        generate();
     }
 
     public void generate()
@@ -96,6 +95,8 @@ public class Board {
                 board[i][j] = new Tile(0);
             }
         }
+
+        generate();
     }
 
     public void moveLeft()

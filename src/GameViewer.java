@@ -20,7 +20,11 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
 
     public static Font FONT;
 
+    public static final Color BG_COLOR = new Color(237, 228, 219);
+
     public static final Color BORDER_COLOR = new Color(185, 173, 162);
+
+    public static final Color BUTTON_COLOR = new Color(140, 122,105);
 
     public static final Color DARK_TEXT = new Color (118, 110, 102);
 
@@ -45,6 +49,20 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
             new Color(118, 232, 137),
             new Color(94, 181, 100),
         };
+
+    public static final String[] BUTTON_LABELS = {
+            "How To Play",
+            "Reset",
+            "Save",
+            "Load"
+    };
+
+    public static final String[] BUTTON_STATES = {
+            "INSTRUCTIONS",
+            "GAME",
+            "SELECT_SAVE",
+            "SELECT_LOAD"
+    };
 
     private Game game;
 
@@ -86,8 +104,14 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
 
     public void drawBackground(Graphics g)
     {
-        g.setColor(new Color(237, 228, 219));
+        g.setColor(BG_COLOR);
         g.fillRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT + BORDER_HEIGHT);
+
+
+        int size = SCREEN_HEIGHT / 8;
+        g.setFont(FONT.deriveFont(Font.PLAIN, size));
+        g.setColor(DARK_TEXT);
+        g.drawString("2048", SCREEN_HEIGHT / 20, BORDER_HEIGHT + SCREEN_HEIGHT / 20 + g.getFontMetrics().getHeight() / 2);
     }
     @Override
     public void keyTyped(KeyEvent e) {
