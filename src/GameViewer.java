@@ -59,7 +59,7 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
 
     public static final String[] BUTTON_STATES = {
             "INSTRUCTIONS",
-            "GAME",
+            "RESET",
             "SELECT_SAVE",
             "SELECT_LOAD"
     };
@@ -97,8 +97,12 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
             b.draw(g);
         }
 
-//        g.setColor(new Color(0, 0, 0, 140));
-//        g.fillRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT + BORDER_HEIGHT);
+        if (game.getState().equals("INSTRUCTIONS"))
+        {
+            g.setColor(new Color(0, 0, 0, 140));
+            g.fillRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT + BORDER_HEIGHT);
+        }
+
         Toolkit.getDefaultToolkit().sync();
     }
 
@@ -120,7 +124,8 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (game.getBoard().gameNotOver()) {
+        if (game.getState().equals("GAME") && game.getBoard().gameNotOver())
+        {
             int keyCode = e.getKeyCode();
 
             if (keyCode == KeyEvent.VK_W) {
@@ -135,36 +140,33 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
             if (keyCode == KeyEvent.VK_D) {
                 game.getBoard().moveRight();
             }
-            if (keyCode == KeyEvent.VK_R) {
-                game.getBoard().reset();
-                System.out.println(SCREEN_HEIGHT);
-                System.out.println(SCREEN_WIDTH);
-            }
-            if (keyCode == KeyEvent.VK_L) {
-                game.getBoard().load();
-            }
-            if (keyCode == KeyEvent.VK_K) {
-                try {
-                    game.getBoard().save();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
+
+            repaint();
         }
-        repaint();
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e)
+    {
 
     }
 
     @Override
     public void mouseClicked(MouseEvent e)
     {
-        for (Button b : game.getButton())
+        if (game.getState().equals("GAME"))
         {
-            b.mouseInBounds(e.getX(), e.getY());
+            for (Button b : game.getButton())
+            {
+                b.press(e.getX(), e.getY());
+            }
+            repaint();
+        }
+
+        else if (game.getState().equals("INSTRUCTIONS"))
+        {
+            game.setState("GAME");
+            repaint();
         }
     }
 

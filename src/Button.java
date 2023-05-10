@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.io.IOException;
 
 public class Button
 {
@@ -26,44 +27,62 @@ public class Button
         g.setColor(GameViewer.BUTTON_COLOR);
         g.fillRoundRect(x1, y1, x2-x1, y2-y1, 50, 50);
 
-        String displayMessage = "AA" + label + "AA";
-        int size = (int) ((x2 - x1) / displayMessage.length()) * 4;
-        // Height differential = * 1.5
-        System.out.println(getFontSize("Test", 250, g, 0));
+        String displayMessage = "      " + label + "      ";
 
         g.setColor(GameViewer.LIGHT_TEXT);
-        g.setFont(GameViewer.FONT.deriveFont(Font.BOLD, size));
+        g.setFont(GameViewer.FONT.deriveFont(Font.BOLD, getFontSize(displayMessage, x2-x1, g, 0)));
 
-        g.drawString(displayMessage, x1, y2);
+        g.drawString(displayMessage, x1, y2 - (y2-y1) / 2 + g.getFontMetrics().getHeight() / 4);
     }
 
     public int getFontSize(String text, int bounds, Graphics g, int size)
     {
-        Font f = GameViewer.FONT.deriveFont(Font.BOLD, size);
-        g.setFont(f);
-        int width = g.getFontMetrics().stringWidth(text);
-        if (width >= bounds)
+        g.setFont(GameViewer.FONT.deriveFont(Font.BOLD, size));
+        if (g.getFontMetrics().stringWidth(text) < bounds)
         {
-            return size;
+            return getFontSize(text, bounds, g, size + 1);
         }
 
-        getFontSize(text, bounds, g, size + 1);
-
-        return 0;
+        return size;
     }
 
     public boolean mouseInBounds(int mouseX, int mouseY)
     {
         if (mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2)
         {
-            System.out.println(label);
             return true;
         }
         return false;
     }
 
-    public String press()
+    public String press(int mouseX, int mouseY)
     {
-        return state;
+        if (mouseInBounds(mouseX, mouseY))
+        {
+            if (state.equals("SELECT_SAVE"))
+            {
+                try {
+                    game.getBoard().save();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (state.equals("SELECT_LOAD"))
+            {
+                System.out.println("loading");
+                game.getBoard().load();
+            }
+            if (state.equals("RESET"))
+            {
+                game.getBoard().reset();
+            }
+
+            if (state.equals("INSTRUCTIONS"))
+            {
+                game.setState(state);
+            }
+        }
+
+        return null;
     }
 }

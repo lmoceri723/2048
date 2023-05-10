@@ -7,11 +7,14 @@ public class Game {
     private Button[] buttons;
     private GameViewer window;
 
+    private String state;
+
     public Game()
     {
         createButtons();
         board = new Board();
         window = new GameViewer(this);
+        state = "INSTRUCTIONS";
     }
 
     public void createButtons()
@@ -37,6 +40,16 @@ public class Game {
     {
         return buttons;
     }
+
+    public String getState()
+    {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public void playGame()
     {
         window.repaint();
