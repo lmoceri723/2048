@@ -7,11 +7,9 @@ public class Button
 
     private String label;
 
-    private String state;
-
     private Game game;
 
-    public Button(Game game, int x1, int y1, int x2, int y2, String label, String state)
+    public Button(Game game, int x1, int y1, int x2, int y2, String label)
     {
         this.game = game;
         this.x1 = x1;
@@ -19,7 +17,6 @@ public class Button
         this.x2 = x2;
         this.y2 = y2;
         this.label = label;
-        this.state = state;
     }
 
     public void draw(Graphics g)
@@ -35,7 +32,7 @@ public class Button
         g.drawString(displayMessage, x1, y2 - (y2-y1) / 2 + g.getFontMetrics().getHeight() / 4);
     }
 
-    public int getFontSize(String text, int bounds, Graphics g, int size)
+    public static int getFontSize(String text, int bounds, Graphics g, int size)
     {
         g.setFont(GameViewer.FONT.deriveFont(Font.BOLD, size));
         if (g.getFontMetrics().stringWidth(text) < bounds)
@@ -59,7 +56,7 @@ public class Button
     {
         if (mouseInBounds(mouseX, mouseY))
         {
-            if (state.equals("SELECT_SAVE"))
+            if (label.equals("Save"))
             {
                 try {
                     game.getBoard().save();
@@ -67,19 +64,18 @@ public class Button
                     throw new RuntimeException(e);
                 }
             }
-            if (state.equals("SELECT_LOAD"))
+            if (label.equals("Load"))
             {
-                System.out.println("loading");
                 game.getBoard().load();
             }
-            if (state.equals("RESET"))
+            if (label.equals("Reset"))
             {
                 game.getBoard().reset();
             }
 
-            if (state.equals("INSTRUCTIONS"))
+            if (label.equals("How To Play"))
             {
-                game.setState(state);
+                game.setState("How To Play");
             }
         }
 

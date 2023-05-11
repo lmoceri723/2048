@@ -14,7 +14,7 @@ public class Game {
         createButtons();
         board = new Board();
         window = new GameViewer(this);
-        state = "INSTRUCTIONS";
+        state = "How To Play";
     }
 
     public void createButtons()
@@ -27,7 +27,7 @@ public class Game {
         {
             int y1 = GameViewer.BORDER_HEIGHT + GameViewer.SCREEN_HEIGHT / 20 + boxHeight * yShift + boxHeight / 10;
             buttons[yShift - 1] = new Button(this, x1, y1, x2, y1 + boxHeight - boxHeight / 10,
-                    GameViewer.BUTTON_LABELS[yShift-1], GameViewer.BUTTON_STATES[yShift-1]);
+                    GameViewer.BUTTON_LABELS[yShift-1]);
         }
     }
 

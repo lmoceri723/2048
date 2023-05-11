@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLOutput;
 
 public class GameViewer extends JFrame implements KeyListener, MouseListener
 {
@@ -57,11 +56,12 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
             "Load"
     };
 
-    public static final String[] BUTTON_STATES = {
-            "INSTRUCTIONS",
-            "RESET",
-            "SELECT_SAVE",
-            "SELECT_LOAD"
+    public static final String[] INSTRUCTIONS = {
+            "   How To Play   ",
+            "   Use your arrow or WASD keys to move the tiles   ",
+            "   Tiles with the same number merge into one when they touch      ",
+            "   Add them up to reach 2048   ",
+            "   Click anywhere with the mouse to start   "
     };
 
     private Game game;
@@ -97,13 +97,37 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
             b.draw(g);
         }
 
-        if (game.getState().equals("INSTRUCTIONS"))
+        if (game.getState().equals("How To Play"))
         {
-            g.setColor(new Color(0, 0, 0, 140));
-            g.fillRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT + BORDER_HEIGHT);
+            drawInstructions(g);
         }
 
         Toolkit.getDefaultToolkit().sync();
+    }
+
+    public void drawInstructions(Graphics g)
+    {
+        g.setColor(new Color(0, 0, 0, 140));
+        g.fillRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT + BORDER_HEIGHT);
+
+        g.setColor(BG_COLOR);
+        g.fillRoundRect(SCREEN_WIDTH / 5, BORDER_HEIGHT + SCREEN_HEIGHT / 5,
+                SCREEN_WIDTH * 3 / 5, SCREEN_HEIGHT * 3 / 5, 50, 50);
+
+        g.setColor(DARK_TEXT);
+        g.setFont(FONT.deriveFont(Font.BOLD, Button.getFontSize(INSTRUCTIONS[0],
+                SCREEN_WIDTH * 3 / 5, g, 0)));
+        g.drawString(INSTRUCTIONS[0], SCREEN_WIDTH / 5,
+                BORDER_HEIGHT + SCREEN_HEIGHT / 5 + (int) (g.getFontMetrics().getHeight() / 1.2));
+
+        g.setFont(FONT.deriveFont(Font.BOLD, Button.getFontSize(INSTRUCTIONS[2],
+                SCREEN_WIDTH * 3 / 5, g, 0)));
+        for (int line = 1; line < 5; line++)
+        {
+            g.drawString(INSTRUCTIONS[line], SCREEN_WIDTH / 5,
+                    BORDER_HEIGHT + SCREEN_HEIGHT * 9 / 20 + g.getFontMetrics().getHeight() * 2 * (line - 1));
+        }
+
     }
 
     public void drawBackground(Graphics g)
@@ -115,11 +139,8 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
         int size = SCREEN_HEIGHT / 8;
         g.setFont(FONT.deriveFont(Font.PLAIN, size));
         g.setColor(DARK_TEXT);
-        g.drawString("2048", SCREEN_HEIGHT / 20, BORDER_HEIGHT + SCREEN_HEIGHT / 20 + g.getFontMetrics().getHeight() / 2);
-    }
-    @Override
-    public void keyTyped(KeyEvent e) {
-
+        g.drawString("2048", SCREEN_HEIGHT / 20,
+                BORDER_HEIGHT + SCREEN_HEIGHT / 20 + g.getFontMetrics().getHeight() / 2);
     }
 
     @Override
@@ -146,12 +167,6 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
     }
 
     @Override
-    public void keyReleased(KeyEvent e)
-    {
-
-    }
-
-    @Override
     public void mouseClicked(MouseEvent e)
     {
         if (game.getState().equals("GAME"))
@@ -163,13 +178,24 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
             repaint();
         }
 
-        else if (game.getState().equals("INSTRUCTIONS"))
+        else if (game.getState().equals("How To Play"))
         {
             game.setState("GAME");
             repaint();
         }
     }
 
+    @Override
+    public void keyTyped(KeyEvent e)
+    {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e)
+    {
+
+    }
     @Override
     public void mousePressed(MouseEvent e) {
 
