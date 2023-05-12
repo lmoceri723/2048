@@ -58,7 +58,7 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
 
     public static final String[] INSTRUCTIONS = {
             "   How To Play   ",
-            "   Use your arrow or WASD keys to move the tiles   ",
+            "   Use your WASD keys to move the tiles   ",
             "   Tiles with the same number merge into one when they touch      ",
             "   Add them up to reach 2048   ",
             "   Click anywhere with the mouse to start   "
