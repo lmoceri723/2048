@@ -9,6 +9,9 @@ import java.io.IOException;
 
 public class GameViewer extends JFrame implements KeyListener, MouseListener
 {
+    // Static and instance variables
+    /* Gets the screen height, which is the highest multiple of 200 pixels
+       Inclusive of the 30 pixel border able to fit vertically on the screen */
     public static final int SCREEN_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 30
             - ((int) (((Toolkit.getDefaultToolkit().getScreenSize().getHeight()) - 30) % 200));
     public static final int SCREEN_WIDTH = SCREEN_HEIGHT * 3 / 2;
@@ -64,10 +67,12 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
             "   Click anywhere with the mouse to start   "
     };
 
-    private Game game;
+    private final Game game;
 
+    // Constructor for the viewer, initializes instance variables
     public GameViewer(Game game) {
         this.game = game;
+        // Tries to initialize the font
         try {
             FONT = Font.createFont(Font.TRUETYPE_FONT, GameViewer.FONT_FILE);
             FONT = FONT.deriveFont(Font.BOLD, 100);
@@ -76,6 +81,7 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
             throw new RuntimeException(e);
         }
 
+        // Sets the screen size, title, and key and mouse listeners
         setSize(SCREEN_WIDTH, SCREEN_HEIGHT + 30);
         setLocationRelativeTo(null);
         setTitle("2048!");
@@ -87,8 +93,10 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
         setVisible(true);
     }
 
+    // Draws the game
     public void paint(Graphics g)
     {
+        // Draws the background, board, and buttons
         drawBackground(g);
         game.getBoard().draw(g);
 
@@ -97,29 +105,36 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
             b.draw(g);
         }
 
+        // Draws the instructions screen over the game
         if (game.getState().equals("How To Play"))
         {
             drawInstructions(g);
         }
 
+        // Syncs to reduce stuttering
         Toolkit.getDefaultToolkit().sync();
     }
 
+    // Draws the instruction screen
     public void drawInstructions(Graphics g)
     {
+        // Draws an opaque layer over the board
         g.setColor(new Color(0, 0, 0, 140));
         g.fillRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT + BORDER_HEIGHT);
 
+        // Draws the box in which the instructions are encased
         g.setColor(BG_COLOR);
         g.fillRoundRect(SCREEN_WIDTH / 5, BORDER_HEIGHT + SCREEN_HEIGHT / 5,
                 SCREEN_WIDTH * 3 / 5, SCREEN_HEIGHT * 3 / 5, 50, 50);
 
+        // Draws the "How To Play" label
         g.setColor(DARK_TEXT);
         g.setFont(FONT.deriveFont(Font.BOLD, Button.getFontSize(INSTRUCTIONS[0],
                 SCREEN_WIDTH * 3 / 5, g, 0)));
         g.drawString(INSTRUCTIONS[0], SCREEN_WIDTH / 5,
                 BORDER_HEIGHT + SCREEN_HEIGHT / 5 + (int) (g.getFontMetrics().getHeight() / 1.2));
 
+        // Draws the instructions with the font size of the largest line
         g.setFont(FONT.deriveFont(Font.BOLD, Button.getFontSize(INSTRUCTIONS[2],
                 SCREEN_WIDTH * 3 / 5, g, 0)));
         for (int line = 1; line < 5; line++)
@@ -130,12 +145,14 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
 
     }
 
+    // Draws the background and logo
     public void drawBackground(Graphics g)
     {
+        // Draws the background
         g.setColor(BG_COLOR);
         g.fillRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT + BORDER_HEIGHT);
 
-
+        // Draws the 2048 logo
         int size = SCREEN_HEIGHT / 8;
         g.setFont(FONT.deriveFont(Font.PLAIN, size));
         g.setColor(DARK_TEXT);
@@ -143,32 +160,63 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
                 BORDER_HEIGHT + SCREEN_HEIGHT / 20 + g.getFontMetrics().getHeight() / 2);
     }
 
+    // Runs when a key is pressed and processes the user input
     @Override
     public void keyPressed(KeyEvent e) {
-        if (game.getState().equals("GAME") && game.getBoard().gameNotOver())
+        // Gets the key the user entered
+        int keyCode = e.getKeyCode();
+
+        // Allows instructions and resetting to be entered as long as the user is in a game
+        if (game.getState().equals("GAME"))
         {
-            int keyCode = e.getKeyCode();
-
-            if (keyCode == KeyEvent.VK_W) {
-                game.getBoard().moveUp();
+            // Resets the board
+            if (keyCode == KeyEvent.VK_R)
+            {
+                game.getBoard().reset();
             }
-            if (keyCode == KeyEvent.VK_A) {
-                game.getBoard().moveLeft();
-            }
-            if (keyCode == KeyEvent.VK_S) {
-                game.getBoard().moveDown();
-            }
-            if (keyCode == KeyEvent.VK_D) {
-                game.getBoard().moveRight();
+            // Opens the instructions
+            if (keyCode == KeyEvent.VK_SPACE)
+            {
+                game.setState("How To Play");
+                repaint();
             }
 
-            repaint();
+            // Checks if the game is ongoing
+            if (game.getBoard().gameNotOver())
+            {
+                // Moves the board in whatever direction the user specifies by calling helper functions
+                if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
+                    game.getBoard().moveUp();
+                }
+                if (keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_LEFT) {
+                    game.getBoard().moveLeft();
+                }
+                if (keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
+                    game.getBoard().moveDown();
+                }
+                if (keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
+                    game.getBoard().moveRight();
+                }
+                repaint();
+            }
+        }
+        // Allows the user to exit the instructions screen by pressing space
+        else if (game.getState().equals("How To Play"))
+        {
+            if (keyCode == KeyEvent.VK_SPACE)
+            {
+                game.setState("GAME");
+                repaint();
+            }
         }
     }
 
+    // Runs when the mouse is clicked to handle mouse input
     @Override
     public void mouseClicked(MouseEvent e)
     {
+        // Runs press on each button at the mouse coordinates,
+        // Which checks if the coordinates are inside the button and executes its action
         if (game.getState().equals("GAME"))
         {
             for (Button b : game.getButton())
@@ -178,12 +226,15 @@ public class GameViewer extends JFrame implements KeyListener, MouseListener
             repaint();
         }
 
+        // Exits the instructions screen if the mouse is pressed
         else if (game.getState().equals("How To Play"))
         {
             game.setState("GAME");
             repaint();
         }
     }
+
+    // Required functions for Mouse and Keyboard Listeners
 
     @Override
     public void keyTyped(KeyEvent e)

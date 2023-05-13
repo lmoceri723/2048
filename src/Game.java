@@ -1,16 +1,15 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
 public class Game {
-    private Board board;
+    // Instance variables
+    private final Board board;
     private Button[] buttons;
-    private GameViewer window;
+    private final GameViewer window;
 
     private String state;
 
+    // Constructor for game
     public Game()
     {
+        // Creates the buttons, board, and viewer, and sets the state to show the instructions upon launch
         createButtons();
         board = new Board();
         window = new GameViewer(this);
@@ -19,9 +18,11 @@ public class Game {
 
     public void createButtons()
     {
+        // Gets the height of a box and its x coordinates relative to the screen size
         int boxHeight = GameViewer.SCREEN_HEIGHT * 9 / 50;
         int x1 = GameViewer.SCREEN_HEIGHT / 20;
         int x2 = GameViewer.SCREEN_HEIGHT / 2;
+        // Initializes the buttons and sets their positions and states
         buttons = new Button[4];
         for (int yShift = 1; yShift < 5; yShift++)
         {
@@ -31,6 +32,7 @@ public class Game {
         }
     }
 
+    // Getters and setters
     public Board getBoard()
     {
         return board;

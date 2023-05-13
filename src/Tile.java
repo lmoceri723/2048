@@ -1,15 +1,14 @@
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 
 public class Tile {
+    // Instance variables
     private int val;
     private boolean newlyCombined;
 
-
+    // Constructor for Tile
     public Tile()
     {
+        // Initializes its value with a 90% chance of being 2 and a 10% chance of being 4
         int chance = (int) (Math.random() * 10);
         if (chance == 0)
         {
@@ -21,23 +20,31 @@ public class Tile {
         }
         newlyCombined = false;
     }
+
+    // Constructor to create a tile with a specific value
     public Tile(int val)
     {
         this.val = val;
         newlyCombined = false;
     }
 
-
-    public void combine(Tile other)
+    // Attempts to combine 2 tiles
+    public boolean combine(Tile other)
     {
+        // Checks if the tiles are combinable
         if (this.val != 0 && this.val == other.val && !this.newlyCombined && !other.newlyCombined)
         {
+            // Combines the two tiles and returns true
             this.val *= 2;
             this.newlyCombined = true;
             other.val = 0;
+            return true;
         }
+        // Returns false otherwise
+        return false;
     }
 
+    // Getters and setters
     public int getVal()
     {
         return val;

@@ -3,12 +3,14 @@ import java.io.IOException;
 
 public class Button
 {
-    private int x1, y1, x2, y2;
+    // Instance variables
+    private final int x1, y1, x2, y2;
 
-    private String label;
+    private final String label;
 
-    private Game game;
+    private final Game game;
 
+    // Constructor for Button
     public Button(Game game, int x1, int y1, int x2, int y2, String label)
     {
         this.game = game;
@@ -19,11 +21,14 @@ public class Button
         this.label = label;
     }
 
+    // Draws the button
     public void draw(Graphics g)
     {
+        // Draws the shape of the button
         g.setColor(GameViewer.BUTTON_COLOR);
         g.fillRoundRect(x1, y1, x2-x1, y2-y1, 50, 50);
 
+        // Draws the label in the center of the button
         String displayMessage = "      " + label + "      ";
 
         g.setColor(GameViewer.LIGHT_TEXT);
@@ -32,8 +37,10 @@ public class Button
         g.drawString(displayMessage, x1, y2 - (y2-y1) / 2 + g.getFontMetrics().getHeight() / 4);
     }
 
+    // Gets the required font size to fill a space with bounds pixels using String text
     public static int getFontSize(String text, int bounds, Graphics g, int size)
     {
+        //
         g.setFont(GameViewer.FONT.deriveFont(Font.BOLD, size));
         if (g.getFontMetrics().stringWidth(text) < bounds)
         {
@@ -45,14 +52,10 @@ public class Button
 
     public boolean mouseInBounds(int mouseX, int mouseY)
     {
-        if (mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2)
-        {
-            return true;
-        }
-        return false;
+        return mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2;
     }
 
-    public String press(int mouseX, int mouseY)
+    public void press(int mouseX, int mouseY)
     {
         if (mouseInBounds(mouseX, mouseY))
         {
@@ -79,6 +82,5 @@ public class Button
             }
         }
 
-        return null;
     }
 }

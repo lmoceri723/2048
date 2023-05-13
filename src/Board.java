@@ -1,14 +1,11 @@
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Board {
-    private Tile[][] board;
+    private final Tile[][] board;
     public static final int BOARD_SIZE = 4;
-    public static final int BOARD_DIMENSIONS = 600;
 
     public Board()
     {
@@ -30,7 +27,7 @@ public class Board {
 
     public ArrayList<Integer[]> getEmptySpaces()
     {
-        ArrayList<Integer[]> spaces = new ArrayList<Integer[]>();
+        ArrayList<Integer[]> spaces = new ArrayList<>();
         for (int i = 0; i < BOARD_SIZE; i++)
         {
             for (int j = 0; j < BOARD_SIZE; j++)
@@ -48,7 +45,7 @@ public class Board {
     {
         // Check if board is the same after being changed moved in each direction
         Board testingBoard = new Board();
-        boolean notMoveable;
+        boolean notMovable;
 
         for (int row = 0; row < BOARD_SIZE; row++)
         {
@@ -58,18 +55,18 @@ public class Board {
             }
         }
         testingBoard.moveLeft();
-        notMoveable = this.equals(testingBoard);
+        notMovable = this.equals(testingBoard);
 
         testingBoard.moveRight();
-        notMoveable = notMoveable && this.equals(testingBoard);
+        notMovable = notMovable && this.equals(testingBoard);
 
         testingBoard.moveUp();
-        notMoveable = notMoveable && this.equals(testingBoard);
+        notMovable = notMovable && this.equals(testingBoard);
 
         testingBoard.moveDown();
-        notMoveable = notMoveable && this.equals(testingBoard);
+        notMovable = notMovable && this.equals(testingBoard);
 
-        return !notMoveable;
+        return !notMovable;
     }
 
     public boolean equals(Board other)
@@ -101,19 +98,21 @@ public class Board {
 
     public void moveLeft()
     {
+        boolean hasChanged = false;
         for (int row = 0; row < BOARD_SIZE; row++)
         {
             for (int col = 1; col < BOARD_SIZE;)
             {
                 if (col > 0)
                 {
-                    board[row][col-1].combine(board[row][col]);
+                    hasChanged = board[row][col-1].combine(board[row][col]) || hasChanged;
                 }
                 if (col > 0 && board[row][col].getVal() != 0 && board[row][col-1].getVal() == 0)
                 {
                     board[row][col-1].setVal(board[row][col].getVal());
                     board[row][col].setVal(0);
                     col--;
+                    hasChanged = true;
                 }
                 else
                 {
@@ -126,19 +125,22 @@ public class Board {
                 board[row][col].setNewlyCombined(false);
             }
         }
-
-       generate();
+        if (hasChanged)
+        {
+            generate();
+        }
     }
 
     public void moveRight()
     {
+        boolean hasChanged = false;
         for (int row = 0; row < BOARD_SIZE; row++)
         {
             for (int col = BOARD_SIZE; col >= 0;)
             {
                 if (col < BOARD_SIZE - 1)
                 {
-                    board[row][col + 1].combine(board[row][col]);
+                    hasChanged = board[row][col + 1].combine(board[row][col]) || hasChanged;
                 }
 
                 if (col < BOARD_SIZE - 1 && board[row][col].getVal() != 0 && board[row][col+1].getVal() == 0)
@@ -146,6 +148,7 @@ public class Board {
                     board[row][col+1].setVal(board[row][col].getVal());
                     board[row][col].setVal(0);
                     col++;
+                    hasChanged = true;
                 }
                 else
                 {
@@ -159,23 +162,28 @@ public class Board {
             }
         }
 
-        generate();
+        if (hasChanged)
+        {
+            generate();
+        }
     }
     public void moveUp()
     {
+        boolean hasChanged = false;
         for (int col = 0; col < BOARD_SIZE; col++)
         {
             for (int row = 1; row < BOARD_SIZE;)
             {
                 if (row > 0)
                 {
-                    board[row-1][col].combine(board[row][col]);
+                    hasChanged = board[row-1][col].combine(board[row][col]) || hasChanged;
                 }
                 if (row > 0 && board[row][col].getVal() != 0 && board[row-1][col].getVal() == 0)
                 {
                     board[row-1][col].setVal(board[row][col].getVal());
                     board[row][col].setVal(0);
                     row--;
+                    hasChanged = true;
                 }
                 else
                 {
@@ -189,17 +197,21 @@ public class Board {
             }
         }
 
-        generate();
+        if (hasChanged)
+        {
+            generate();
+        }
     }
     public void moveDown()
     {
+        boolean hasChanged = false;
         for (int col = 0; col < BOARD_SIZE; col++)
         {
             for (int row = BOARD_SIZE - 1; row >= 0;)
             {
                 if (row < BOARD_SIZE - 1)
                 {
-                    board[row+1][col].combine(board[row][col]);
+                    hasChanged = board[row+1][col].combine(board[row][col]) || hasChanged;
                 }
 
                 if (row < BOARD_SIZE - 1 && board[row][col].getVal() != 0 && board[row+1][col].getVal() == 0)
@@ -207,6 +219,7 @@ public class Board {
                     board[row+1][col].setVal(board[row][col].getVal());
                     board[row][col].setVal(0);
                     row++;
+                    hasChanged = true;
                 }
                 else
                 {
@@ -220,7 +233,10 @@ public class Board {
             }
         }
 
-        generate();
+        if (hasChanged)
+        {
+            generate();
+        }
     }
 
     public void draw (Graphics g)
@@ -249,8 +265,7 @@ public class Board {
         {
             for (int col = 0; col < BOARD_SIZE; col++)
             {
-                String output = board[row][col].getVal() + "";
-                writer.append(output);
+                writer.append(String.valueOf(board[row][col].getVal()));
                 writer.newLine();
             }
         }
