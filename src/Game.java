@@ -1,3 +1,4 @@
+// By Landon Moceri on 5/12
 public class Game {
     // Instance variables
     private final Board board;

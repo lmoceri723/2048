@@ -1,7 +1,9 @@
+// By Landon Moceri on 5/12
 import java.awt.*;
 
 public class Tile {
     // Instance variables
+    public static final double FONT_CONSTANT = 1.65;
     private int val;
     private boolean newlyCombined;
 
@@ -31,7 +33,7 @@ public class Tile {
     // Attempts to combine 2 tiles
     public boolean combine(Tile other)
     {
-        // Checks if the tiles are combinable
+        // Checks if the tiles are combinable and if they have already been made in a movement
         if (this.val != 0 && this.val == other.val && !this.newlyCombined && !other.newlyCombined)
         {
             // Combines the two tiles and returns true
@@ -60,6 +62,7 @@ public class Tile {
         this.newlyCombined = newlyCombined;
     }
 
+    // Gets the x and y coordinates of a tile relative to its position on the board
     public int[] getCoordinates(int row, int col)
     {
         int x = GameViewer.SCREEN_WIDTH / 3 + GameViewer.SCREEN_HEIGHT / 20 + GameViewer.SCREEN_HEIGHT / 50 +
@@ -70,8 +73,10 @@ public class Tile {
         return new int[]{x, y};
     }
 
+    // Draws the tile
     public void draw(Graphics g, int row, int col)
     {
+        // Uses log base 2 to get its position on a corresponding array of colors
         int index;
         if (val == 0)
         {
@@ -82,13 +87,16 @@ public class Tile {
             index = (int) (Math.log(val) / Math.log(2));
         }
 
+        // Gets the coordinates using the helper method
         int[] coordinates = getCoordinates(row, col);
         int x = coordinates[0];
         int y = coordinates[1];
 
+        // Draws the box for the square
         g.setColor(GameViewer.SQUARE_COLORS[index]);
         g.fillRect(x, y, GameViewer.SCREEN_HEIGHT / 5, GameViewer.SCREEN_HEIGHT / 5);
 
+        // Sets the text color to one that will best match the square
         switch (val) {
             case 0 -> {
                 return;
@@ -97,8 +105,9 @@ public class Tile {
             default -> g.setColor(GameViewer.LIGHT_TEXT);
         }
 
+        // Gets the font size needed for the text to fit and draws the number in the box
         String displayMessage = " " + val + " ";
-        int size = (int) ((GameViewer.SCREEN_HEIGHT / 5) / displayMessage.length() * 1.65);
+        int size = (int) ((GameViewer.SCREEN_HEIGHT / 5) / displayMessage.length() * FONT_CONSTANT);
 
         Font newFont = GameViewer.FONT.deriveFont(Font.BOLD, size);
         g.setFont(newFont);
